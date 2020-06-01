@@ -1,0 +1,122 @@
+class Stage1 extends Phaser.Scene {
+  constructor () {
+    super('Stage1');
+  }
+
+  preload () {
+    this.load.image('greengrass', 'assets/greengrass.png');
+    this.load.image('reddot', 'assets/reddot.png');
+  }
+
+  create () {
+    let tileArray = [
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    ]
+
+    // When loading from an array, make sure to specify the tileWidth and tileHeight
+    const map = this.make.tilemap({ data: tileArray, tileWidth: 24, tileHeight: 24 });
+    const tiles = map.addTilesetImage("greengrass", null, 24, 24, 0,0);
+    const layer = map.createStaticLayer(0, tiles, 0, 0);
+
+
+    var player = this.add.image(24 * 5 + 12, 24 * 6 + 12, 'reddot');
+
+    //  Left
+    this.input.keyboard.on('keydown_A', function (event) {
+
+        var tile = layer.getTileAtWorldXY(player.x - 24, player.y, true);
+
+        if (tile.index === 1)
+        {
+            //  Blocked, we can't move
+        }
+        else
+        {
+            player.x -= 24;
+            player.angle = 180;
+        }
+
+    });
+
+    //  Right
+    this.input.keyboard.on('keydown_D', function (event) {
+
+        var tile = layer.getTileAtWorldXY(player.x + 24, player.y, true);
+
+        if (tile.index === 1)
+        {
+            //  Blocked, we can't move
+        }
+        else
+        {
+            player.x += 24;
+            player.angle = 0;
+        }
+
+    });
+
+    //  Up
+    this.input.keyboard.on('keydown_W', function (event) {
+
+        var tile = layer.getTileAtWorldXY(player.x, player.y - 24, true);
+
+        if (tile.index === 1)
+        {
+            //  Blocked, we can't move
+        }
+        else
+        {
+            player.y -= 24;
+            player.angle = -90;
+        }
+
+    });
+
+    //  Down
+    this.input.keyboard.on('keydown_S', function (event) {
+
+        var tile = layer.getTileAtWorldXY(player.x, player.y + 24, true);
+
+        if (tile.index === 1)
+        {
+            //  Blocked, we can't move
+        }
+        else
+        {
+            player.y += 24;
+            player.angle = 90;
+        }
+
+    });
+
+
+
+  }
+  update(){
+
+  }
+};
